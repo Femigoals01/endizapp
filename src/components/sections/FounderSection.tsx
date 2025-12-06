@@ -34,13 +34,13 @@ export default function FounderSection() {
           viewport={{ once: true }}
           transition={{ duration: 1 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-[#1F4E73] mb-4">Meet Our Founder</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1F4E73] mb-4"> Founder/CEO</h2>
           <h3 className="text-2xl text-[#FBB040] font-semibold mb-6">Oginni Olusola, CEO</h3>
           <p className="text-gray-700 mb-4">
             Oginni Olusola founded Endiz Design with a vision to create spaces that inspire and elevate lifestyles. 
           </p>
           <p className="text-gray-700">
-            With over 15 years of experience in architecture and design, John leads a team of creatives dedicated to sustainable, innovative, and functional architecture.
+            With over 15 years of experience in architecture and design, Olusola leads a team of creatives dedicated to sustainable, innovative, and functional architecture.
           </p>
         </motion.div>
 
