@@ -172,6 +172,7 @@ export default function ProjectsSection() {
                   height={300}
                   className="object-cover w-full h-64"
                 />
+                
                 <motion.div
                   className="absolute inset-0 bg-[#FBB040]/40 opacity-0 flex items-center justify-center text-white font-semibold text-2xl transition-all group-hover:opacity-100"
                 >

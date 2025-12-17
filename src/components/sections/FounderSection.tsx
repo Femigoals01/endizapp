@@ -10,17 +10,17 @@ export default function FounderSection() {
         
         {/* Founder Image */}
         <motion.div
-          className="md:w-1/2 relative w-full h-80 md:h-96 rounded-full shadow-lg overflow-hidden"
+          className="md:w-1/2 relative w-full h-80 md:h-130 shadow-lg rounded-full overflow-hidden"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
         >
           <Image
-            src="/endizceos.png"  // Replace with your actual founder image
+            src="/coe-endiz-removebg-preview.png"  // Replace with your actual founder image
             alt="Founder / CEO"
             fill
-            className="object-cover rounded-xl"
+            className="object-fill"
             placeholder="blur" 
             blurDataURL="/images/founder-blur.jpg" // optional low-res blur image
           />
@@ -35,7 +35,7 @@ export default function FounderSection() {
           transition={{ duration: 1 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold text-[#1F4E73] mb-4"> Founder/CEO</h2>
-          <h3 className="text-2xl text-[#FBB040] font-semibold mb-6">Oginni Olusola, CEO</h3>
+          <h3 className="text-2xl text-[#FBB040] font-semibold mb-6">Oginni Olusola</h3>
           <p className="text-gray-700 mb-4">
             Oginni Olusola founded Endiz Design with a vision to create spaces that inspire and elevate lifestyles. 
           </p>
