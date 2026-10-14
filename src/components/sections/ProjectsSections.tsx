@@ -1,166 +1,46 @@
 
-
-
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import Tilt from "react-parallax-tilt";
-// import Image from "next/image";
-// import { motion } from "framer-motion";
-
-// const allProjects = [
-//   { id: 1, category: "Residential" },
-//   { id: 2, category: "Commercial" },
-//   { id: 3, category: "Residential" },
-//   { id: 4, category: "Commercial" },
-//   { id: 5, category: "Residential" },
-//   { id: 6, category: "Commercial" },
-// ];
-
-// const categories = ["All", "Residential", "Commercial"];
-
-// export default function ProjectsSection() {
-//   const [activeCategory, setActiveCategory] = useState("All");
-//   const [isClient, setIsClient] = useState(false);
-
-//   // ✅ Only render after mounting on client
-//   useEffect(() => {
-//     setIsClient(true);
-//   }, []);
-
-//   if (!isClient) return null;
-
-//   const filteredProjects =
-//     activeCategory === "All"
-//       ? allProjects
-//       : allProjects.filter((p) => p.category === activeCategory);
-
-//   return (
-//     <section id="projects" className="py-32 bg-gray-50 relative overflow-hidden">
-//       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-//         <h2 className="text-4xl md:text-5xl font-bold text-center text-[#1F4E73] mb-8">
-//           Our Projects
-//         </h2>
-
-//         {/* Category Tabs */}
-//         <div className="flex justify-center mb-12 gap-6">
-//           {categories.map((cat) => (
-//             <button
-//               key={cat}
-//               onClick={() => setActiveCategory(cat)}
-//               className={`px-6 py-2 rounded-full font-semibold transition-colors ${
-//                 activeCategory === cat
-//                   ? "bg-[#FBB040] text-white shadow-lg"
-//                   : "bg-white text-[#1F4E73] border border-gray-300 hover:bg-[#FBB040]/20"
-//               }`}
-//             >
-//               {cat}
-//             </button>
-//           ))}
-//         </div>
-
-//         {/* Project Grid */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-//           {filteredProjects.map((project) => (
-//             <Tilt
-//               key={project.id}
-//               tiltMaxAngleX={15}
-//               tiltMaxAngleY={15}
-//               glareEnable={true}
-//               glareMaxOpacity={0.3}
-//               glareColor="#FBB040"
-//               className="rounded-xl shadow-lg cursor-pointer overflow-hidden"
-//             >
-//               <motion.div
-//                 whileHover={{ scale: 1.05 }}
-//                 transition={{ duration: 0.5 }}
-//                 className="relative"
-//               >
-//                 <Image
-//                   src={`/images/project-${project.id}.jpg`}
-//                   alt={`Project ${project.id}`}
-//                   width={400}
-//                   height={300}
-//                   className="object-cover w-full h-64"
-//                 />
-                
-//                 <motion.div
-//                   className="absolute inset-0 bg-[#FBB040]/40 opacity-0 flex items-center justify-center text-white font-semibold text-2xl transition-all group-hover:opacity-100"
-//                 >
-//                   {project.category} {project.id}
-//                 </motion.div>
-//               </motion.div>
-//             </Tilt>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-
-
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, ImageIcon } from "lucide-react";
 
-const allProjects = [
-  {
-    id: 1,
-    category: "Residential",
-    title: "Contemporary Residence",
-    location: "Ibadan, Nigeria",
-  },
-  {
-    id: 2,
-    category: "Commercial",
-    title: "Modern Commercial Space",
-    location: "Ibadan, Nigeria",
-  },
-  {
-    id: 3,
-    category: "Residential",
-    title: "Private Family Residence",
-    location: "Ibadan, Nigeria",
-  },
-  {
-    id: 4,
-    category: "Commercial",
-    title: "Contemporary Office Complex",
-    location: "Ibadan, Nigeria",
-  },
-  {
-    id: 5,
-    category: "Residential",
-    title: "Modern Luxury Home",
-    location: "Ibadan, Nigeria",
-  },
-  {
-    id: 6,
-    category: "Commercial",
-    title: "Mixed-Use Development",
-    location: "Ibadan, Nigeria",
-  },
-];
+import type { PublicProject } from "@/types/public-project";
 
-const categories = ["All", "Residential", "Commercial"];
+type Props = {
+  projects: PublicProject[];
+};
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ projects }: Props) {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const filteredProjects =
-    activeCategory === "All"
-      ? allProjects
-      : allProjects.filter((project) => project.category === activeCategory);
+  const categories = useMemo(
+    () => [
+      "All",
+      ...Array.from(
+        new Set(projects.map((project) => project.category))
+      ),
+    ],
+    [projects]
+  );
+
+  const filteredProjects = useMemo(
+    () =>
+      activeCategory === "All"
+        ? projects
+        : projects.filter(
+            (project) => project.category === activeCategory
+          ),
+    [projects, activeCategory]
+  );
 
   return (
     <section
       id="projects"
       className="relative overflow-hidden bg-[#F7F7F5] py-28 md:py-36"
     >
-      {/* Subtle Brand Detail */}
       <div className="pointer-events-none absolute -right-40 top-20 h-96 w-96 rounded-full bg-[#8EC543]/5 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
@@ -173,7 +53,6 @@ export default function ProjectsSection() {
           className="mb-16 flex flex-col justify-between gap-10 lg:flex-row lg:items-end"
         >
           <div className="max-w-3xl">
-            {/* Label */}
             <div className="mb-5 flex items-center gap-4">
               <span className="h-px w-12 bg-[#F3B24E]" />
 
@@ -182,141 +61,198 @@ export default function ProjectsSection() {
               </span>
             </div>
 
-            {/* Heading */}
             <h2 className="text-4xl font-light leading-tight tracking-[-0.035em] text-[#305A77] sm:text-5xl md:text-6xl">
               Spaces we've
               <br />
-              <span className="font-semibold">brought to life.</span>
+              <span className="font-semibold">
+                brought to life.
+              </span>
             </h2>
 
             <p className="mt-6 max-w-2xl text-base leading-7 text-gray-600 md:text-lg">
-              A selection of projects reflecting our approach to architecture,
-              functionality, craftsmanship and thoughtful design.
+              A selection of projects reflecting our approach to
+              architecture, functionality, craftsmanship and
+              thoughtful design.
             </p>
           </div>
 
-          {/* Category Navigation */}
-          <div className="flex flex-wrap items-center gap-2 border-b border-gray-300 pb-2">
-            {categories.map((category) => {
-              const isActive = activeCategory === category;
+          {projects.length > 0 && (
+            <div className="flex max-w-full flex-wrap items-center gap-2 border-b border-gray-300 pb-2">
+              {categories.map((category) => {
+                const isActive = activeCategory === category;
 
-              return (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`relative px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] transition-colors duration-300 ${
-                    isActive
-                      ? "text-[#305A77]"
-                      : "text-gray-500 hover:text-[#305A77]"
-                  }`}
-                >
-                  {category}
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setActiveCategory(category)}
+                    className={`relative px-4 py-3 text-xs font-semibold uppercase tracking-[0.15em] transition-colors duration-300 ${
+                      isActive
+                        ? "text-[#305A77]"
+                        : "text-gray-500 hover:text-[#305A77]"
+                    }`}
+                  >
+                    {category}
 
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeProjectCategory"
-                      className="absolute bottom-[-9px] left-0 right-0 h-[2px] bg-[#F3B24E]"
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeProjectCategory"
+                        className="absolute bottom-[-9px] left-0 right-0 h-[2px] bg-[#F3B24E]"
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </motion.div>
 
         {/* Projects */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 gap-x-7 gap-y-14 md:grid-cols-2 lg:grid-cols-3"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
-              <motion.article
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.08,
-                }}
-                className="group"
-              >
-                {/* Image */}
-                <div className="relative overflow-hidden bg-[#305A77]">
-                  <div className="relative aspect-[4/3] w-full">
-                    <Image
-                      src={`/images/project-${project.id}.jpg`}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
+        {projects.length === 0 ? (
+          <div className="flex min-h-[320px] flex-col items-center justify-center border border-[#305A77]/10 bg-white px-6 text-center">
+            <ImageIcon
+              size={40}
+              strokeWidth={1.2}
+              className="text-[#305A77]/40"
+            />
 
-                    {/* Dark Hover Overlay */}
-                    <div className="absolute inset-0 bg-[#305A77]/0 transition-all duration-500 group-hover:bg-[#305A77]/65" />
+            <h3 className="mt-6 text-2xl font-medium text-[#305A77]">
+              Our portfolio is taking shape.
+            </h3>
 
-                    {/* Project Number */}
-                    <div className="absolute left-5 top-5">
-                      <span className="text-sm font-medium tracking-[0.15em] text-white drop-shadow-lg">
-                        0{project.id}
-                      </span>
+            <p className="mt-3 max-w-md text-sm leading-7 text-gray-500">
+              We are preparing a selection of our architectural
+              projects. Please check back soon.
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            layout
+            className="grid grid-cols-1 gap-x-7 gap-y-14 md:grid-cols-2 lg:grid-cols-3"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, index) => (
+                <motion.article
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: Math.min(index, 5) * 0.08,
+                  }}
+                  className="group min-w-0"
+                >
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="block"
+                    aria-label={`View ${project.title}`}
+                  >
+                    {/* Image */}
+                    <div className="relative overflow-hidden bg-[#305A77]">
+                      <div className="relative aspect-[4/3] w-full">
+                        {project.imageUrl ? (
+                          <Image
+                            src={project.imageUrl}
+                            alt={project.title}
+                            fill
+                            unoptimized
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#305A77] to-[#193A52] text-white/50">
+                            <ImageIcon
+                              size={44}
+                              strokeWidth={1}
+                            />
+                            <span className="mt-4 text-[10px] uppercase tracking-[0.25em]">
+                              Endiz Architecture
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="absolute inset-0 bg-[#305A77]/0 transition-all duration-500 group-hover:bg-[#305A77]/65" />
+
+                        {/* Project Number */}
+                        <div className="absolute left-5 top-5">
+                          <span className="text-sm font-medium tracking-[0.15em] text-white drop-shadow-lg">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+
+                        {/* Category */}
+                        <div className="absolute right-5 top-5">
+                          <span className="bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#305A77]">
+                            {project.category}
+                          </span>
+                        </div>
+
+                        {/* Hover Content */}
+                        <div className="absolute inset-x-0 bottom-0 translate-y-5 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                          <div className="flex items-end justify-between gap-5">
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.2em] text-[#F3B24E]">
+                                View Project
+                              </p>
+
+                              <h3 className="mt-2 text-xl font-medium text-white">
+                                {project.title}
+                              </h3>
+                            </div>
+
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-white/50 text-white transition-all duration-300 group-hover:border-[#F3B24E] group-hover:bg-[#F3B24E] group-hover:text-[#305A77]">
+                              <ArrowUpRight size={20} />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Category */}
-                    <div className="absolute right-5 top-5">
-                      <span className="bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#305A77]">
+                    {/* Project Information */}
+                    <div className="flex items-start justify-between gap-6 border-b border-gray-300 py-5">
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-semibold tracking-tight text-[#305A77] transition-colors group-hover:text-[#C58A35]">
+                          {project.title}
+                        </h3>
+
+                        <p className="mt-1 text-sm text-gray-500">
+                          {project.location}
+                        </p>
+                      </div>
+
+                      <span className="shrink-0 pt-1 text-[10px] font-medium uppercase tracking-[0.15em] text-gray-400">
                         {project.category}
                       </span>
                     </div>
+                  </Link>
+                </motion.article>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
 
-                    {/* Hover Content */}
-                    <div className="absolute inset-x-0 bottom-0 translate-y-5 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                      <div className="flex items-end justify-between gap-5">
-                        <div>
-                          <p className="text-xs uppercase tracking-[0.2em] text-[#F3B24E]">
-                            View Project
-                          </p>
 
-                          <h3 className="mt-2 text-xl font-medium text-white">
-                            {project.title}
-                          </h3>
-                        </div>
-
-                        <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-white/50 text-xl text-white transition-all duration-300 group-hover:border-[#F3B24E] group-hover:bg-[#F3B24E] group-hover:text-[#305A77]">
-                          →
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Project Information */}
-                <div className="flex items-start justify-between gap-6 border-b border-gray-300 py-5">
-                  <div>
-                    <h3 className="text-lg font-semibold tracking-tight text-[#305A77]">
-                      {project.title}
-                    </h3>
-
-                    <p className="mt-1 text-sm text-gray-500">
-                      {project.location}
-                    </p>
-                  </div>
-
-                  <span className="pt-1 text-xs font-medium uppercase tracking-[0.15em] text-gray-400">
-                    {project.category}
-                  </span>
-                </div>
-              </motion.article>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {projects.length > 0 && (
+  <div className="mt-14 flex justify-center">
+    <Link
+      href="/projects"
+      className="group inline-flex items-center gap-4 border border-[#305A77] px-8 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#305A77] transition-colors hover:bg-[#305A77] hover:text-white"
+    >
+      View All Projects
+      <ArrowUpRight
+        size={18}
+        className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+      />
+    </Link>
+  </div>
+)}
 
         {/* Bottom CTA */}
         <motion.div
@@ -349,7 +285,6 @@ export default function ProjectsSection() {
         </motion.div>
       </div>
 
-      {/* Brand Accent */}
       <div className="absolute bottom-0 left-0 h-[3px] w-24 bg-[#F3B24E]" />
       <div className="absolute bottom-0 left-24 h-[3px] w-12 bg-[#8EC543]" />
     </section>

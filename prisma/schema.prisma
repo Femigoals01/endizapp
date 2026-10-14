@@ -1,0 +1,237 @@
+
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+enum ProjectStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+}
+
+enum EnquiryStatus {
+  NEW
+  READ
+  REPLIED
+  CLOSED
+}
+
+// ==========================================
+// ADMIN USERS
+// ==========================================
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(ADMIN)
+  active       Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// PROJECT CATEGORIES
+// ==========================================
+
+model ProjectCategory {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// PROJECTS
+// ==========================================
+
+model Project {
+  id            String  @id @default(cuid())
+  title         String
+  slug          String  @unique
+  summary       String?
+  description   String? @db.Text
+  architectNote String? @db.Text
+
+  status ProjectStatus @default(UPCOMING)
+
+  // Project location
+  city    String
+  state   String
+  country String @default("Nigeria")
+
+  // Cover image
+  coverImageUrl String?
+  coverImageId  String?
+
+  // Construction progress
+  progress Int?
+
+  // Project dates
+  startDate      DateTime?
+  completionDate DateTime?
+
+  // Visibility
+  featured  Boolean @default(false)
+  published Boolean @default(false)
+
+  // Category relationship
+  categoryId String
+  category   ProjectCategory @relation(fields: [categoryId], references: [id])
+
+  // Project galleries and stages
+  stages ProjectStage[]
+  images ProjectImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, published])
+  @@index([categoryId])
+  @@index([featured])
+}
+
+// ==========================================
+// CONSTRUCTION / PROJECT STAGES
+// ==========================================
+
+model ProjectStage {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?   @db.Text
+  architectNote String?   @db.Text
+  stageDate     DateTime?
+
+  // Display order
+  position Int @default(0)
+
+  // Whether this is the current stage
+  isCurrent Boolean @default(false)
+
+  // Parent project
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Images belonging to this stage
+  images ProjectImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, position])
+}
+
+// ==========================================
+// PROJECT IMAGES
+// ==========================================
+
+model ProjectImage {
+  id       String  @id @default(cuid())
+  imageUrl String
+  publicId String?
+
+  caption  String?
+  altText  String?
+  position Int     @default(0)
+
+  // Parent project
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Optional project stage
+  stageId String?
+  stage   ProjectStage? @relation(fields: [stageId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId, position])
+  @@index([stageId])
+}
+
+// ==========================================
+// WEBSITE CONTENT MANAGEMENT
+// ==========================================
+
+model WebsiteSection {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  title       String?
+  subtitle    String?
+  description String? @db.Text
+
+  // Flexible section content
+  content Json?
+
+  // Show or hide section
+  enabled Boolean @default(true)
+
+  // Section images
+  images SectionImage[]
+
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// WEBSITE SECTION IMAGES
+// ==========================================
+
+model SectionImage {
+  id       String  @id @default(cuid())
+  imageUrl String
+  publicId String?
+
+  altText  String?
+  caption  String?
+  position Int     @default(0)
+
+  // Parent website section
+  sectionId String
+  section   WebsiteSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([sectionId, position])
+}
+
+// ==========================================
+// CONTACT ENQUIRIES
+// ==========================================
+
+model ContactEnquiry {
+  id      String  @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  service String?
+  message String  @db.Text
+
+  status    EnquiryStatus @default(NEW)
+  adminNote String?       @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+}
