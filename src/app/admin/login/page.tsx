@@ -218,7 +218,7 @@ export default function AdminLoginPage() {
 
           <div className="mt-12 border-t border-slate-200 pt-6 text-center">
             <p className="text-xs leading-6 text-slate-400">
-              Restricted to authorized Endiz personnel.
+              Restricted to authorized Endiz personnel only.
               <br />
               All administrative access is subject to verification.
             </p>
