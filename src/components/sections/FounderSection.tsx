@@ -1,58 +1,6 @@
 
 
 
-// "use client";
-
-// import Image from "next/image";
-// import { motion } from "framer-motion";
-
-// export default function FounderSection() {
-//   return (
-//     <section id="founder" className="py-32 bg-gray-50">
-//       <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col md:flex-row items-center gap-12">
-        
-//         {/* Founder Image */}
-//         <motion.div
-//           className="md:w-1/2 relative w-full h-80 md:h-130 shadow-lg rounded-full overflow-hidden"
-//           initial={{ opacity: 0, x: -50 }}
-//           whileInView={{ opacity: 1, x: 0 }}
-//           viewport={{ once: true }}
-//           transition={{ duration: 1 }}
-//         >
-//           <Image
-//             src="/coe-endiz-removebg-preview.png"  // Replace with your actual founder image
-//             alt="Founder / CEO"
-//             fill
-//             className="object-fill"
-//             placeholder="blur" 
-//             blurDataURL="/images/founder-blur.jpg" // optional low-res blur image
-//           />
-//         </motion.div>
-
-//         {/* Founder Bio */}
-//         <motion.div
-//           className="md:w-1/2 text-center md:text-left"
-//           initial={{ opacity: 0, x: 50 }}
-//           whileInView={{ opacity: 1, x: 0 }}
-//           viewport={{ once: true }}
-//           transition={{ duration: 1 }}
-//         >
-//           <h2 className="text-4xl md:text-5xl font-bold text-[#1F4E73] mb-4"> Founder/CEO</h2>
-//           <h3 className="text-2xl text-[#FBB040] font-semibold mb-6">Oginni Olusola</h3>
-//           <p className="text-gray-700 mb-4">
-//             Oginni Olusola founded Endiz Design with a vision to create spaces that inspire and elevate lifestyles. 
-//           </p>
-//           <p className="text-gray-700">
-//             With over 15 years of experience in architecture and design, Olusola leads a team of creatives dedicated to sustainable, innovative, and functional architecture.
-//           </p>
-//         </motion.div>
-
-//       </div>
-//     </section>
-//   );
-// }
-
-
 
 "use client";
 
@@ -103,7 +51,7 @@ export default function FounderSection() {
             {/* Image Container */}
             <div className="relative z-10 flex min-h-[500px] items-end justify-center overflow-hidden bg-[#F2F2EF] sm:min-h-[580px]">
               <Image
-                src="/coe-endiz-removebg-preview.png"
+                src="/olusola-peter.png"
                 alt="Oginni Olusola, Founder and CEO of Endiz Design"
                 fill
                 sizes="(max-width: 1024px) 100vw, 45vw"
@@ -158,7 +106,7 @@ export default function FounderSection() {
             {/* Biography */}
             <div className="mt-7 max-w-2xl space-y-5 text-base leading-7 text-gray-600">
               <p>
-                With over 15 years of experience in architecture and design,
+                With over 11 years of experience in architecture and design,
                 Olusola leads Endiz Design with a commitment to thoughtful
                 design, technical excellence and meaningful solutions.
               </p>
